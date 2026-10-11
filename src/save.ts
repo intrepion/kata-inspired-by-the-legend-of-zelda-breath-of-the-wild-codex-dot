@@ -12,6 +12,10 @@ export function decodeSave(raw:string|null):State|null{
   if(!Array.isArray(s.beacons)||s.beacons.length!==3||!s.beacons.every((b:unknown)=>typeof b==='boolean'))return null;
   if(!Array.isArray(s.dials)||s.dials.length!==3||!s.dials.every((n:unknown)=>bounded(n,0,2)&&Number.isInteger(n)))return null;
   if(!Number.isInteger(s.checkpoint)||s.checkpoint< -1||s.checkpoint>2||(s.checkpoint>=0&&!s.beacons[s.checkpoint]))return null;
+  if(![s.health,s.shards,s.berries].every(Number.isInteger))return null;
+  if(s.shards!==s.collected.length-(s.beacons[0]?5:0)||s.berries>2+s.pickedBerries.length)return null;
+  if(s.beacons[1]&&s.dials.join(',')!=='0,1,2')return null;
+  if(s.beacons[2]&&s.defeated.length!==3)return null;
   if(typeof s.completed!=='boolean'||(s.completed&&!s.beacons.every(Boolean)))return null;
   return {...initialState(),x:s.x,z:s.z,y:height(s.x,s.z),health:s.health,stamina:s.stamina,shards:s.shards,berries:s.berries,collected:s.collected,pickedBerries:s.pickedBerries,defeated:s.defeated,beacons:s.beacons,dials:s.dials,checkpoint:s.checkpoint,completed:s.completed};
  }catch{return null;}

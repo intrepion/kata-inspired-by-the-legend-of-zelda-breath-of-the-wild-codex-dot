@@ -39,7 +39,7 @@ export class Game {
   if(this.gliding)s.vy=Math.max(-2.4,s.vy);
   s.y+=s.vy*dt;
   if(s.y<=ground){
-   if(s.vy< -22){this.damage(1);this.message='Hard landing • open your glider with Space.';}
+   if(s.vy< -22){const lethal=s.health===1&&this.invulnerable<=0;this.damage(1);if(lethal)return;this.message='Hard landing • open your glider with Space.';}
    s.y=ground;s.vy=0;this.gliding=false;
   }
   this.attackTime=Math.max(0,this.attackTime-dt);this.invulnerable=Math.max(0,this.invulnerable-dt);

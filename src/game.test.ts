@@ -45,3 +45,24 @@ it('warns before striking and lets the wayfarer retreat from the marked ground',
  game.update(.1,{x:0,z:0,sprint:false});expect(game.state.health).toBe(5);expect(game.enemies[0].phase).toBe('warning');
  game.update(.6,{x:-1,z:0,sprint:true});game.update(.5,{x:-1,z:0,sprint:true});expect(game.state.health).toBe(5);
 });
+it('rejects forged inventory, fractional counters and unearned beacons',()=>{
+ const s=new Game().state;
+ expect(decodeSave(encodeSave({...s,shards:5}))).toBeNull();
+ expect(decodeSave(encodeSave({...s,health:2.5}))).toBeNull();
+ expect(decodeSave(encodeSave({...s,beacons:[false,false,true]}))).toBeNull();
+});
+it('recovers at the checkpoint altitude after a lethal highland landing',()=>{
+ const game=new Game();Object.assign(game.state,{x:-58,z:-53,y:height(-58,-53)+.01,vy:-30,health:1,checkpoint:0,beacons:[true,false,false]});
+ game.update(.01,{x:0,z:0,sprint:false});
+ expect(game.state.x).toBe(-43);expect(game.state.y).toBeCloseTo(height(-43,40));expect(game.message).toContain('discoveries');
+});
+it('blocks walking on a steep slope but permits stamina climbing',()=>{
+ const game=new Game();Object.assign(game.state,{x:-58,z:-28,y:height(-58,-28)});
+ game.update(.2,{x:0,z:-1,sprint:false});expect(game.state.z).toBe(-28);
+ game.update(.2,{x:0,z:-1,sprint:true});expect(game.state.z).toBeLessThan(-30);expect(game.state.stamina).toBeLessThan(100);
+});
+it('collides with the beacon and stays inside the world boundary',()=>{
+ const game=new Game();Object.assign(game.state,{x:-48,z:41,y:height(-48,41)});
+ game.update(.5,{x:0,z:-1,sprint:false});expect(game.state.z).toBeGreaterThan(37.6);
+ Object.assign(game.state,{x:107,z:90,y:height(107,90)});game.update(1,{x:1,z:0,sprint:true});expect(game.state.x).toBe(108);
+});

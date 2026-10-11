@@ -1,0 +1,7 @@
+/** Original quiet wind texture and resonant action tones, synthesized entirely in-browser. */
+export class Soundscape {
+ enabled=false;private context?:AudioContext;private windGain?:GainNode;
+ toggle(){this.enabled=!this.enabled;this.initialize();if(this.context&&this.windGain){void this.context.resume();this.windGain.gain.setTargetAtTime(this.enabled?.035:0,this.context.currentTime,.3);}return this.enabled;}
+ tone(frequency:number,duration=.3){if(!this.enabled)return;this.initialize();const ctx=this.context!;void ctx.resume();const osc=ctx.createOscillator(),gain=ctx.createGain();osc.type='sine';osc.frequency.value=frequency;gain.gain.setValueAtTime(.035,ctx.currentTime);gain.gain.exponentialRampToValueAtTime(.001,ctx.currentTime+duration);osc.connect(gain).connect(ctx.destination);osc.start();osc.stop(ctx.currentTime+duration);}
+ private initialize(){if(this.context)return;const ctx=this.context=new AudioContext();const buffer=ctx.createBuffer(1,ctx.sampleRate*4,ctx.sampleRate);const samples=buffer.getChannelData(0);let previous=0;for(let i=0;i<samples.length;i++){previous=(previous+(Math.random()*2-1)*.02)/1.02;samples[i]=previous*3.5;}const noise=ctx.createBufferSource();noise.buffer=buffer;noise.loop=true;const filter=ctx.createBiquadFilter();filter.type='lowpass';filter.frequency.value=650;this.windGain=ctx.createGain();this.windGain.gain.value=0;noise.connect(filter).connect(this.windGain).connect(ctx.destination);noise.start();}
+}

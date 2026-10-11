@@ -5,7 +5,7 @@ const palette={grass:0x89996b,stone:0x535d63,amber:0xffd88b,teal:0x89d6df};
 export class WorldView {
  readonly renderer:THREE.WebGLRenderer;readonly scene=new THREE.Scene();readonly camera=new THREE.PerspectiveCamera(53,1,.1,700);
  private player=new THREE.Group();private cloak:THREE.Mesh;private glider=new THREE.Group();private sword:THREE.Mesh;
- private shards:THREE.Mesh[]=[];private berries:THREE.Group[]=[];private beacons:THREE.Group[]=[];private beams:THREE.Mesh[]=[];private dials:THREE.Group[]=[];
+ private shards:THREE.Mesh[]=[];private berries:THREE.Group[]=[];private beacons:THREE.Group[]=[];private beams:THREE.Mesh[]=[];private dials:THREE.Group[]=[];private runes:THREE.Sprite[]=[];
  private enemies:THREE.Group[]=[];private rings:THREE.Mesh[]=[];private time=0;private motes:THREE.Points;private orbit=0;private pitch=.23;private initialized=false;
  constructor(private game:Game,container:HTMLElement){
   this.renderer=new THREE.WebGLRenderer({antialias:true,powerPreference:'high-performance'});
@@ -50,7 +50,7 @@ export class WorldView {
    for(let j=0;j<5;j++){const angle=j/5*Math.PI*2;const ruin=this.mesh(new THREE.BoxGeometry(1.5,2+j%2*2,1.5),0x848f89);const x=p.x+Math.cos(angle)*9,z=p.z+Math.sin(angle)*9;ruin.position.set(x,height(x,z)+(2+j%2*2)/2,z);this.scene.add(ruin);}
    if(i===1){const clue=this.text('SUN  ·  MOON  ·  STAR',15);clue.position.set(p.x,height(p.x,p.z)+4,p.z+9);this.scene.add(clue);}
   });
-  DIALS.forEach(p=>{const group=new THREE.Group();const base=this.mesh(new THREE.CylinderGeometry(1.2,1.4,1.5,8),0x647475);base.position.y=.75;group.add(base);const rune=this.text('STAR',4);rune.position.y=2.5;group.add(rune);const ring=this.mesh(new THREE.TorusGeometry(.95,.15,5,12),palette.teal,true);ring.rotation.x=Math.PI/2;ring.position.y=1.6;group.add(ring);group.position.set(p.x,height(p.x,p.z),p.z);this.scene.add(group);this.dials.push(group);});
+  DIALS.forEach(p=>{const group=new THREE.Group();const base=this.mesh(new THREE.CylinderGeometry(1.2,1.4,1.5,8),0x647475);base.position.y=.75;group.add(base);const rune=this.text('STAR',4);rune.position.y=2.5;group.add(rune);this.runes.push(rune);const ring=this.mesh(new THREE.TorusGeometry(.95,.15,5,12),palette.teal,true);ring.rotation.x=Math.PI/2;ring.position.y=1.6;group.add(ring);group.position.set(p.x,height(p.x,p.z),p.z);this.scene.add(group);this.dials.push(group);});
   const spire=new THREE.Group();const base=this.mesh(new THREE.CylinderGeometry(4.2,5.5,2,8),0x818e8a);base.position.y=1;spire.add(base);const needle=this.mesh(new THREE.ConeGeometry(2.6,16,5),0x536c72);needle.position.y=9;spire.add(needle);const halo=this.mesh(new THREE.TorusGeometry(4,.18,6,40),palette.amber,true);halo.position.y=13;halo.rotation.x=Math.PI/2;spire.add(halo);const label=this.text('THE HEARTSPIRE',17);label.position.y=18;spire.add(label);spire.position.set(HEART.x,height(HEART.x,HEART.z),HEART.z);this.scene.add(spire);
   for(let i=0;i<2;i++){const post=this.mesh(new THREE.BoxGeometry(1.8,8,2),0x798c86);post.position.set(HEART.x+(i?7:-7),height(HEART.x,HEART.z)+4,HEART.z+9);this.scene.add(post);}const arch=this.mesh(new THREE.BoxGeometry(16,1.3,2),0x798c86);arch.position.set(HEART.x,height(HEART.x,HEART.z)+8,HEART.z+9);this.scene.add(arch);
  }
@@ -63,8 +63,7 @@ export class WorldView {
   this.shards.forEach((m,i)=>{m.visible=!s.collected.includes(i);m.rotation.y=this.time*.8;m.position.y=height(SHARDS[i].x,SHARDS[i].z)+1+Math.sin(this.time*2+i)*.2;});
   this.berries.forEach((g,i)=>{for(let j=1;j<g.children.length;j++)g.children[j].visible=!s.pickedBerries.includes(i);});
   this.beams.forEach((m,i)=>{(m.material as THREE.MeshBasicMaterial).opacity=s.beacons[i]?.48:.08;this.beacons[i].children[2].rotation.y=this.time*.3;});
-  this.dials.forEach((g,i)=>{const old=(g.children[1] as THREE.Sprite);const value=['SUN','MOON','STAR'][s.dials[i]];if(old.userData.value!==value){const replacement=this.text(value,4);replacement.position.y=2.5;replacement.userData.value=value;g.remove(old);(old.material.map)?.dispose();old.material.dispose();g.add(replacement); // keep rune in slot 1
-    const ring=g.children[1];g.children[1]=replacement;g.children[2]=ring;
+  this.dials.forEach((g,i)=>{const old=this.runes[i];const value=['SUN','MOON','STAR'][s.dials[i]];if(old.userData.value!==value){const replacement=this.text(value,4);replacement.position.y=2.5;replacement.userData.value=value;g.remove(old);(old.material.map)?.dispose();old.material.dispose();g.add(replacement);this.runes[i]=replacement;
    }});
   this.enemies.forEach((g,i)=>{const e=this.game.enemies[i];g.visible=!s.defeated.includes(i);g.position.set(e.x,height(e.x,e.z),e.z);g.rotation.y=Math.atan2(s.x-e.x,s.z-e.z);this.rings[i].visible=e.phase==='warning'||e.phase==='strike';this.rings[i].scale.setScalar(e.phase==='warning'?1+(1-e.timer)*.25:1.3);g.children[0].rotation.z=e.phase==='warning'?Math.sin(this.time*25)*.08:0;});
   this.motes.rotation.y=this.time*.009;
