@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { Game } from './game';
-import { BEACONS, BERRIES, DIALS, HEART, SHARDS, SCENERY, height } from './world';
+import { BEACONS, BERRIES, DIALS, HEART, SHARDS, SCENERY, LOOKOUT, LOOKOUT_TOP, GLIDE_LANDING, height } from './world';
 const palette={grass:0x89996b,stone:0x535d63,amber:0xffd88b,teal:0x89d6df};
 export class WorldView {
  readonly renderer:THREE.WebGLRenderer;readonly scene=new THREE.Scene();readonly camera=new THREE.PerspectiveCamera(53,1,.1,700);
@@ -27,8 +27,8 @@ export class WorldView {
   // Amber trail stones connect the arrival to the meadow; three routes fork at the valley.
   for(const target of [BEACONS[0],BEACONS[1],BEACONS[2],HEART])for(let i=0;i<22;i++){const t=i/22,x=target.x*t,z=72+(target.z-72)*t;const pebble=this.mesh(new THREE.DodecahedronGeometry(.35),0xd6c0a0);pebble.position.set(x,height(x,z)+.12,z);pebble.scale.y=.4;this.scene.add(pebble);}
   const lake=this.mesh(new THREE.CircleGeometry(11,48),0x689eab);lake.rotation.x=-Math.PI/2;lake.position.set(34,height(34,48)+.18,48);lake.scale.set(1,.6,1);this.scene.add(lake);
-  this.addRuins();
-  SHARDS.forEach(p=>{const shard=this.mesh(new THREE.OctahedronGeometry(.65),palette.teal,true);shard.position.set(p.x,height(p.x,p.z)+1,p.z);this.scene.add(shard);this.shards.push(shard);const base=this.mesh(new THREE.DodecahedronGeometry(.8),0x767e70);base.position.set(p.x,height(p.x,p.z)+.3,p.z);base.scale.y=.4;this.scene.add(base);});
+  this.addRuins();this.addLookout();
+  SHARDS.forEach(p=>{const shard=this.mesh(new THREE.OctahedronGeometry(.65),palette.teal,true);shard.position.set(p.x,p.y??height(p.x,p.z)+1,p.z);this.scene.add(shard);this.shards.push(shard);const base=this.mesh(new THREE.DodecahedronGeometry(.8),0x767e70);base.position.set(p.x,height(p.x,p.z)+.3,p.z);base.scale.y=.4;this.scene.add(base);});
   BERRIES.forEach(p=>{const bush=new THREE.Group();const leaves=this.mesh(new THREE.IcosahedronGeometry(1.2),0x566d54);leaves.position.y=.6;bush.add(leaves);for(let i=0;i<4;i++){const berry=this.mesh(new THREE.SphereGeometry(.22,6,5),0xee967e);berry.position.set(Math.sin(i*2)*.7,1,Math.cos(i*2)*.7);bush.add(berry);}bush.position.set(p.x,height(p.x,p.z),p.z);this.scene.add(bush);this.berries.push(bush);});
   const body=this.mesh(new THREE.CylinderGeometry(.55,.7,1.35,7),0x435c66);body.position.y=1.2;this.player.add(body);
   this.cloak=this.mesh(new THREE.ConeGeometry(.9,1.4,7),0xcb765a);this.cloak.position.y=1.5;this.player.add(this.cloak);
@@ -45,6 +45,20 @@ export class WorldView {
  }
  private mesh(geometry:THREE.BufferGeometry,color:number,glow=false){const mesh=new THREE.Mesh(geometry,new THREE.MeshStandardMaterial({color,flatShading:true,roughness:.85,emissive:glow?color:0,emissiveIntensity:glow?.6:0}));mesh.castShadow=true;mesh.receiveShadow=true;return mesh;}
  private text(text:string,width=12){const canvas=document.createElement('canvas');canvas.width=1024;canvas.height=128;const ctx=canvas.getContext('2d')!;ctx.fillStyle='rgba(20,43,49,.75)';ctx.roundRect(8,8,1008,112,20);ctx.fill();ctx.fillStyle='#f7e9cb';ctx.textAlign='center';ctx.font='600 40px Georgia';ctx.fillText(text,512,80);const sprite=new THREE.Sprite(new THREE.SpriteMaterial({map:new THREE.CanvasTexture(canvas),depthTest:false}));sprite.scale.set(width,width/8,1);return sprite;}
+ private addLookout(){
+  const tower=this.mesh(new THREE.CylinderGeometry(LOOKOUT.radius,LOOKOUT.radius,LOOKOUT.height,24),0x8a998d);
+  tower.position.set(LOOKOUT.x,LOOKOUT_TOP-LOOKOUT.height/2,LOOKOUT.z);this.scene.add(tower);
+  for(let y=1;y<LOOKOUT.height;y+=1.2)for(let side=0;side<12;side++){
+   const a=side/12*Math.PI*2,hold=this.mesh(new THREE.BoxGeometry(.55,.13,.35),0xd1bc88);
+   hold.position.set(LOOKOUT.x+Math.sin(a)*(LOOKOUT.radius+.1),height(LOOKOUT.x,LOOKOUT.z)+y,LOOKOUT.z+Math.cos(a)*(LOOKOUT.radius+.1));hold.rotation.y=a;this.scene.add(hold);
+  }
+  const label=this.text('WINDWARD LOOKOUT · CLIMB & GLIDE',19);label.position.set(LOOKOUT.x,LOOKOUT_TOP+4,LOOKOUT.z);this.scene.add(label);
+  const ringGeometry=new THREE.RingGeometry(GLIDE_LANDING.radius-.4,GLIDE_LANDING.radius,48);ringGeometry.rotateX(-Math.PI/2);
+  const ringPoints=ringGeometry.attributes.position;
+  for(let i=0;i<ringPoints.count;i++){const x=ringPoints.getX(i)+GLIDE_LANDING.x,z=ringPoints.getZ(i)+GLIDE_LANDING.z;ringPoints.setXYZ(i,x,height(x,z)+.2,z);}
+  const landing=new THREE.Mesh(ringGeometry,new THREE.MeshBasicMaterial({color:0xa1e1b5,transparent:true,opacity:.85,side:THREE.DoubleSide}));this.scene.add(landing);
+  const target=this.text('GLIDE LANDING',15);target.position.set(GLIDE_LANDING.x,height(GLIDE_LANDING.x,GLIDE_LANDING.z)+3,GLIDE_LANDING.z);this.scene.add(target);
+ }
  private addRuins(){
   BEACONS.forEach((p,i)=>{const group=new THREE.Group();const base=this.mesh(new THREE.CylinderGeometry(3.8,4.5,.7,8),0xa1a898);base.position.y=.2;group.add(base);const pillar=this.mesh(new THREE.CylinderGeometry(.85,1.3,6,6),palette.stone);pillar.position.y=3;group.add(pillar);const crystal=this.mesh(new THREE.OctahedronGeometry(1.5),p.color,true);crystal.position.y=7;group.add(crystal);const beam=new THREE.Mesh(new THREE.CylinderGeometry(.3,.3,90,12),new THREE.MeshBasicMaterial({color:p.color,transparent:true,opacity:.2,depthWrite:false}));beam.position.y=49;group.add(beam);this.beams.push(beam);const label=this.text(p.name.toUpperCase(),15);label.position.y=10;group.add(label);group.position.set(p.x,height(p.x,p.z),p.z);this.scene.add(group);this.beacons.push(group);
    for(let j=0;j<5;j++){const angle=j/5*Math.PI*2;const ruin=this.mesh(new THREE.BoxGeometry(1.5,2+j%2*2,1.5),0x848f89);const x=p.x+Math.cos(angle)*9,z=p.z+Math.sin(angle)*9;ruin.position.set(x,height(x,z)+(2+j%2*2)/2,z);this.scene.add(ruin);}
@@ -58,9 +72,9 @@ export class WorldView {
  get yaw(){return this.orbit;}
  resize(){const w=window.innerWidth,h=window.innerHeight;this.renderer.setSize(w,h);this.camera.aspect=w/h;this.camera.updateProjectionMatrix();}
  render(dt:number,moving:boolean){
-  this.time+=dt;const s=this.game.state;this.player.position.set(s.x,s.y,s.z);this.player.rotation.y=s.facing;this.glider.visible=this.game.gliding;
+  this.time+=dt;const s=this.game.state;this.player.position.set(s.x,s.y,s.z);this.player.rotation.y=s.facing;this.player.rotation.x=this.game.climbing?.12:0;this.glider.visible=this.game.gliding;this.sword.visible=!this.game.climbing;
   this.cloak.rotation.z=moving?Math.sin(this.time*12)*.06:0;this.sword.rotation.x=this.game.attackTime>0?-2+this.game.attackTime*6:0;this.player.visible=this.game.invulnerable===0||Math.sin(this.time*30)>-.4;
-  this.shards.forEach((m,i)=>{m.visible=!s.collected.includes(i);m.rotation.y=this.time*.8;m.position.y=height(SHARDS[i].x,SHARDS[i].z)+1+Math.sin(this.time*2+i)*.2;});
+  this.shards.forEach((m,i)=>{m.visible=!s.collected.includes(i);m.rotation.y=this.time*.8;m.position.y=(SHARDS[i].y??height(SHARDS[i].x,SHARDS[i].z)+1)+Math.sin(this.time*2+i)*.2;});
   this.berries.forEach((g,i)=>{for(let j=1;j<g.children.length;j++)g.children[j].visible=!s.pickedBerries.includes(i);});
   this.beams.forEach((m,i)=>{(m.material as THREE.MeshBasicMaterial).opacity=s.beacons[i]?.48:.08;this.beacons[i].children[2].rotation.y=this.time*.3;});
   this.dials.forEach((g,i)=>{const old=this.runes[i];const value=['SUN','MOON','STAR'][s.dials[i]];if(old.userData.value!==value){const replacement=this.text(value,4);replacement.position.y=2.5;replacement.userData.value=value;g.remove(old);(old.material.map)?.dispose();old.material.dispose();g.add(replacement);this.runes[i]=replacement;

@@ -1,6 +1,6 @@
 # Aster Vale
 
-An original playable wilderness adventure about returning three wind currents to their home. Explore a low-poly valley, climb its highland, glide across the landscape, gather aster shards, align ancient wind dials and quiet stone sentinels before awakening the Heartspire.
+An original playable wilderness adventure about returning three wind currents to their home. Explore a low-poly valley, climb Windward Lookout and sprint up its highland, glide across the landscape, gather aster shards, align ancient wind dials and quiet stone sentinels before awakening the Heartspire.
 
 Inspired by the exploration and traversal spirit of Breath of the Wild. All world geometry, characters, text, colors and synthesized audio are original; no Nintendo assets are used.
 
@@ -16,7 +16,9 @@ npm run dev
 Open **http://127.0.0.1:5174/**. The server binds locally and uses a strict separate port; it does not affect Driftwood Bay on 5173. If restarting, stop this game's existing server with Ctrl-C first. There is no public deployment or paid service.
 
 - WASD / arrows: move relative to the camera
-- Shift: sprint and climb steep ground, spending stamina
+- Shift: sprint, including uphill paths, spending stamina
+- Walk into the marked lookout wall to climb; move toward / away to ascend / descend, or sideways to traverse; movement spends stamina
+- C / Let go: release a climbing hold; Space while climbing: jump away
 - Space: jump; press again while airborne to open or close the glider
 - E: gather, turn dials, awaken beacons, rest or finish
 - F: strike nearby sentinels; retreat when their warning ring lights up
@@ -34,6 +36,6 @@ npm test
 npm run build
 ```
 
-Ten tests exercise public gameplay and save/load behavior. CI repeats the same commands on every push. See [QA evidence](docs/QA.md), [separate reviews](docs/REVIEW.md), [acceptance specification](docs/SPEC.md), [glossary](GLOSSARY.md), [architecture decision](docs/adr/0001-browser-world.md) and [skill adaptations](docs/WORKFLOW.md).
+Seventeen tests exercise public gameplay and save/load behavior. See [climbing fidelity evidence and acceptance route](docs/CLIMBING_FIDELITY.md). CI repeats the same commands on every push. See [QA evidence](docs/QA.md), [separate reviews](docs/REVIEW.md), [acceptance specification](docs/SPEC.md), [glossary](GLOSSARY.md), [architecture decision](docs/adr/0001-browser-world.md) and [skill adaptations](docs/WORKFLOW.md).
 
 ![The valley](docs/screenshots/valley-desktop.jpg)

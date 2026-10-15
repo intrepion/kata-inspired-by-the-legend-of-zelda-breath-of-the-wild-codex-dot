@@ -1,5 +1,5 @@
 import { initialState, type State } from './game';
-import { height } from './world';
+import { restoreGroundPosition } from './world';
 export const SAVE_KEY='aster-vale-v1';
 export function encodeSave(state:State){return JSON.stringify({version:1,state});}
 export function decodeSave(raw:string|null):State|null{
@@ -17,6 +17,6 @@ export function decodeSave(raw:string|null):State|null{
   if(s.beacons[1]&&s.dials.join(',')!=='0,1,2')return null;
   if(s.beacons[2]&&s.defeated.length!==3)return null;
   if(typeof s.completed!=='boolean'||(s.completed&&!s.beacons.every(Boolean)))return null;
-  return {...initialState(),x:s.x,z:s.z,y:height(s.x,s.z),health:s.health,stamina:s.stamina,shards:s.shards,berries:s.berries,collected:s.collected,pickedBerries:s.pickedBerries,defeated:s.defeated,beacons:s.beacons,dials:s.dials,checkpoint:s.checkpoint,completed:s.completed};
+  return {...initialState(),...restoreGroundPosition(s.x,s.z),health:s.health,stamina:s.stamina,shards:s.shards,berries:s.berries,collected:s.collected,pickedBerries:s.pickedBerries,defeated:s.defeated,beacons:s.beacons,dials:s.dials,checkpoint:s.checkpoint,completed:s.completed};
  }catch{return null;}
 }
