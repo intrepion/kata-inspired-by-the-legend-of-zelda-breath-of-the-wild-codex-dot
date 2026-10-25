@@ -39,3 +39,7 @@ npm run build
 Seventeen tests exercise public gameplay and save/load behavior. See [climbing fidelity evidence and acceptance route](docs/CLIMBING_FIDELITY.md). CI repeats the same commands on every push. See [QA evidence](docs/QA.md), [separate reviews](docs/REVIEW.md), [acceptance specification](docs/SPEC.md), [glossary](GLOSSARY.md), [architecture decision](docs/adr/0001-browser-world.md) and [skill adaptations](docs/WORKFLOW.md).
 
 ![The valley](docs/screenshots/valley-desktop.jpg)
+
+## Play online
+
+[Play the hosted game](https://intrepion.github.io/kata-inspired-by-the-legend-of-zelda-breath-of-the-wild-codex-dot/)
