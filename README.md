@@ -43,3 +43,7 @@ Seventeen tests exercise public gameplay and save/load behavior. See [climbing f
 ## Play online
 
 [Play the hosted game](https://intrepion.github.io/kata-inspired-by-the-legend-of-zelda-breath-of-the-wild-codex-dot/)
+
+## Arcade metadata
+
+See [docs/arcade-metadata.md](docs/arcade-metadata.md) for the game-owned manifest and screenshot provenance.

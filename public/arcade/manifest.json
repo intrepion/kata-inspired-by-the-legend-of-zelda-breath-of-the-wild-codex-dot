@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "gameId": "kata-inspired-by-the-legend-of-zelda-breath-of-the-wild-codex-dot",
+  "playUrl": "https://intrepion.github.io/kata-inspired-by-the-legend-of-zelda-breath-of-the-wild-codex-dot/",
+  "screenshots": [
+    {
+      "path": "arcade/screenshots/view-01.jpg",
+      "sha256": "9c3340f207245a04401ff5bfa2f2f5f52ef1b9aad35f23ec3a2b46a7f96416d7",
+      "alt": "Gameplay capture 1",
+      "provenance": {
+        "kind": "existing_repository_capture",
+        "sourcePath": "docs/screenshots/valley-desktop.jpg",
+        "deployedBuild": null,
+        "captureDate": null
+      }
+    },
+    {
+      "path": "arcade/screenshots/view-02.jpg",
+      "sha256": "916d6cae22a18535d247e2bbf25ee29c27ef743c642f7e2106e8aecc860a32e9",
+      "alt": "Gameplay capture 2",
+      "provenance": {
+        "kind": "existing_repository_capture",
+        "sourcePath": "docs/screenshots/heartspire-desktop.jpg",
+        "deployedBuild": null,
+        "captureDate": null
+      }
+    }
+  ]
+}
