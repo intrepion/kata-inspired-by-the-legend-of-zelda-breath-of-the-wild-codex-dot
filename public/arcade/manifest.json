@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "gameId": "kata-inspired-by-the-legend-of-zelda-breath-of-the-wild-codex-dot",
   "playUrl": "https://intrepion.github.io/kata-inspired-by-the-legend-of-zelda-breath-of-the-wild-codex-dot/",
   "screenshots": [
@@ -23,6 +23,46 @@
         "sourcePath": "docs/screenshots/heartspire-desktop.jpg",
         "deployedBuild": null,
         "captureDate": null
+      }
+    },
+    {
+      "path": "arcade/screenshots/ci-20261102-01.jpg",
+      "sha256": "f548bea109800fffa906ecfb9442769d9d36a24aa9ca961926910c0e3813aa3a",
+      "alt": "Aster Vale gameplay, view 1",
+      "provenance": {
+        "kind": "ci_gameplay_capture",
+        "sourcePath": "arcade/capture-evidence/ci-20261102-01.png",
+        "sourceSha256": "18ac29e1089df4b10a3ccb1d843511eecfd4dfdaa22b938de54a3a39b6273d4b",
+        "captureCommit": "3deea5f9c29069369128e974b8a241decd3a4dcf",
+        "workflowRunId": "41426197145",
+        "inputHashes": {
+          "index.html": "9cb1524b5129471f4908e8f7699e1b9a03aefe4d49a0415f8becd2d6808372d9",
+          "assets/index-ZWB21rOA.css": "8056f737475d4e7fc8542bbf5f8933c311bba9c3706c70d31c786580daf0ca5f",
+          "assets/index-oW3XsJ_R.js": "946c47cc75f3ba01406b5974d4cbbb58975f9297bcba11e6abf3dfd60aad535f"
+        },
+        "publishedFilesVerifiedAt": "2026-11-02T19:01:20Z",
+        "captureRecordPath": "arcade/capture-evidence/ci-20261102-record.json",
+        "captureRecordSha256": "2057292b7136f2013469f32dc92a6435ec03d469accdaefec65833b5e551b6d5"
+      }
+    },
+    {
+      "path": "arcade/screenshots/ci-20261102-02.jpg",
+      "sha256": "7b3c266ae9152da2095f846952186f65dbcdcf4a521420793c00cb369c9f41de",
+      "alt": "Aster Vale gameplay, view 2",
+      "provenance": {
+        "kind": "ci_gameplay_capture",
+        "sourcePath": "arcade/capture-evidence/ci-20261102-02.png",
+        "sourceSha256": "01459f499ccff2966b326a4cd836470b1575da8c6e26a3558eacada5512e27fa",
+        "captureCommit": "3deea5f9c29069369128e974b8a241decd3a4dcf",
+        "workflowRunId": "41426197145",
+        "inputHashes": {
+          "index.html": "9cb1524b5129471f4908e8f7699e1b9a03aefe4d49a0415f8becd2d6808372d9",
+          "assets/index-ZWB21rOA.css": "8056f737475d4e7fc8542bbf5f8933c311bba9c3706c70d31c786580daf0ca5f",
+          "assets/index-oW3XsJ_R.js": "946c47cc75f3ba01406b5974d4cbbb58975f9297bcba11e6abf3dfd60aad535f"
+        },
+        "publishedFilesVerifiedAt": "2026-11-02T19:01:20Z",
+        "captureRecordPath": "arcade/capture-evidence/ci-20261102-record.json",
+        "captureRecordSha256": "2057292b7136f2013469f32dc92a6435ec03d469accdaefec65833b5e551b6d5"
       }
     }
   ]
