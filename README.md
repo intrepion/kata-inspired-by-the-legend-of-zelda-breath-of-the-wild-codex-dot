@@ -1,5 +1,7 @@
 # Aster Vale
 
+[Kata Arcade](https://intrepion.github.io/)
+
 An original playable wilderness adventure about returning three wind currents to their home. Explore a low-poly valley, climb Windward Lookout and sprint up its highland, glide across the landscape, gather aster shards, align ancient wind dials and quiet stone sentinels before awakening the Heartspire.
 
 Inspired by the exploration and traversal spirit of Breath of the Wild. All world geometry, characters, text, colors and synthesized audio are original; no Nintendo assets are used.
