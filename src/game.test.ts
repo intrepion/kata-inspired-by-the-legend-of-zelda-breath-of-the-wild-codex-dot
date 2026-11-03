@@ -67,7 +67,7 @@ it('collides with the beacon and stays inside the world boundary',()=>{
  Object.assign(game.state,{x:107,z:90,y:height(107,90)});game.update(1,{x:1,z:0,sprint:true});expect(game.state.x).toBe(108);
 });
 
-import {LOOKOUT,LOOKOUT_TOP,GLIDE_LANDING,distance} from './world';
+import {LOOKOUT,LOOKOUT_TOP,GLIDE_LANDING,distance,SCENERY} from './world';
 function approachLookout(){const g=new Game();Object.assign(g.state,{x:LOOKOUT.x,z:LOOKOUT.z+LOOKOUT.radius+2,y:height(LOOKOUT.x,LOOKOUT.z+LOOKOUT.radius+2)});g.update(.4,{x:0,z:-1,sprint:false});return g;}
 it('enters a real vertical surface and climbs without uphill horizontal motion',()=>{
  const g=approachLookout();expect(g.climbing).not.toBeNull();expect(g.climbing!.normalZ).toBeGreaterThan(.99);
@@ -98,4 +98,14 @@ it('lets go without a jump and clears wall and flight state on a new journey',()
 it('restores a summit save safely below the new solid while keeping its discovery',()=>{
  const g=new Game();Object.assign(g.state,{x:LOOKOUT.x,z:LOOKOUT.z,y:LOOKOUT_TOP,collected:[11],shards:1});
  const restored=decodeSave(encodeSave(g.state));expect(restored).not.toBeNull();expect(restored?.collected).toEqual([11]);expect(distance(restored!,LOOKOUT)).toBeGreaterThan(LOOKOUT.radius+.8);expect(restored?.y).toBeCloseTo(height(restored!.x,restored!.z));
+});
+
+it('climbs ordinary tree trunks, spends stamina, and can jump away',()=>{
+ const tree=SCENERY.find(p=>p.kind==='tree' && distance(p,LOOKOUT)>10)!;
+ const g=new Game(),radius=.55*tree.scale;
+ Object.assign(g.state,{x:tree.x,z:tree.z+radius+1.2,y:height(tree.x,tree.z+radius+1.2)});
+ g.update(.2,{x:0,z:-1,sprint:false});expect(g.climbing?.kind).toBe('tree');
+ const before=g.state.y,stamina=g.state.stamina;g.update(.5,{x:0,z:-1,sprint:false});
+ expect(g.state.y).toBeGreaterThan(before);expect(g.state.stamina).toBeLessThan(stamina);
+ expect(distance(g.state,tree)).toBeCloseTo(radius+.65);g.jump();expect(g.climbing).toBeNull();expect(g.state.vy).toBeGreaterThan(0);
 });

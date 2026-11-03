@@ -17,7 +17,7 @@ Open **http://127.0.0.1:5174/**. The server binds locally and uses a strict sepa
 
 - WASD / arrows: move relative to the camera
 - Shift: sprint, including uphill paths, spending stamina
-- Walk into the marked lookout wall to climb; move toward / away to ascend / descend, or sideways to traverse; movement spends stamina
+- Walk into a tree trunk or the marked lookout wall to climb; move toward / away to ascend / descend, or sideways to traverse; movement spends stamina. Tree climbs stop below the canopy; jump away or let go to descend
 - C / Let go: release a climbing hold; Space while climbing: jump away
 - Space: jump; press again while airborne to open or close the glider
 - E: gather, turn dials, awaken beacons, rest or finish

@@ -1,4 +1,4 @@
-import { BEACONS, BERRIES, DIALS, ENEMIES, HEART, OBSTACLES, SHARDS, LOOKOUT, LOOKOUT_TOP, GLIDE_LANDING, surfaceGround, distance, height } from './world';
+import { BEACONS, BERRIES, DIALS, ENEMIES, HEART, OBSTACLES, SCENERY, SHARDS, LOOKOUT, LOOKOUT_TOP, GLIDE_LANDING, surfaceGround, distance, height } from './world';
 export { SHARDS } from './world';
 export interface Input { x:number; z:number; sprint:boolean }
 export interface State {
@@ -10,7 +10,7 @@ export function initialState():State{return {x:0,z:72,y:height(0,72),vy:0,facing
 export class Game {
  state:State=initialState();
  enemies:Enemy[]=ENEMIES.map(p=>({...p,health:3,phase:'idle',timer:0,targetX:p.x,targetZ:p.z}));
- climbing:{normalX:number;normalZ:number}|null=null;climbCooldown=0;private lookoutLaunch=false;
+ climbing:{normalX:number;normalZ:number;x:number;z:number;radius:number;top:number;kind:'lookout'|'tree'}|null=null;climbCooldown=0;private lookoutLaunch=false;
  gliding=false;attackTime=0;invulnerable=0;message='Follow the amber stones to the Meadow Offering.';
  get airborne(){return this.state.y>surfaceGround(this.state.x,this.state.z,this.state.y)+.15;}
  update(dt:number,input:Input){
@@ -36,10 +36,23 @@ export class Game {
   if(wallDistance<LOOKOUT.radius+.75 && s.y<LOOKOUT_TOP-.05){
    const oldDistance=distance(s,LOOKOUT),normalX=(s.x-LOOKOUT.x)/(oldDistance||1),normalZ=(s.z-LOOKOUT.z)/(oldDistance||1);
    if(moving && !this.gliding && this.climbCooldown===0 && s.stamina>0 && input.x*normalX+input.z*normalZ<-.15){
-    this.climbing={normalX,normalZ};s.x=LOOKOUT.x+normalX*(LOOKOUT.radius+.65);s.z=LOOKOUT.z+normalZ*(LOOKOUT.radius+.65);s.vy=0;this.gliding=false;
+    this.climbing={normalX,normalZ,x:LOOKOUT.x,z:LOOKOUT.z,radius:LOOKOUT.radius,top:LOOKOUT_TOP,kind:'lookout'};s.x=LOOKOUT.x+normalX*(LOOKOUT.radius+.65);s.z=LOOKOUT.z+normalZ*(LOOKOUT.radius+.65);s.vy=0;this.gliding=false;
     this.message='Climbing · move toward the wall to ascend; away to descend. Space jumps away; C lets go.';return;
    }
    const safe=Math.max(.001,wallDistance);nextX=LOOKOUT.x+(nextX-LOOKOUT.x)/safe*(LOOKOUT.radius+.66);nextZ=LOOKOUT.z+(nextZ-LOOKOUT.z)/safe*(LOOKOUT.radius+.66);
+  }
+  // The rendered tree trunks are climbable surfaces as well as obstacles.
+  // Keep the player on the trunk rather than treating its foliage as a floor.
+  for(const tree of SCENERY){
+   if(tree.kind!=='tree')continue;
+   const radius=.55*tree.scale,d=Math.hypot(nextX-tree.x,nextZ-tree.z),old=distance(s,tree);
+   const normalX=(s.x-tree.x)/(old||1),normalZ=(s.z-tree.z)/(old||1);
+   const top=height(tree.x,tree.z)+4*tree.scale;
+   if(d<radius+.75 && s.y<top && moving && !this.gliding && this.climbCooldown===0 && s.stamina>0 && input.x*normalX+input.z*normalZ<-.15){
+    this.climbing={normalX,normalZ,x:tree.x,z:tree.z,radius,top,kind:'tree'};
+    s.x=tree.x+normalX*(radius+.65);s.z=tree.z+normalZ*(radius+.65);s.vy=0;
+    this.message='Climbing a tree · move toward the trunk to ascend; Space jumps away, C lets go.';return;
+   }
   }
   for(const o of OBSTACLES){
    const d=Math.hypot(nextX-o.x,nextZ-o.z);
@@ -68,14 +81,14 @@ export class Game {
   const up=-(x*contact.normalX+z*contact.normalZ),side=x*contact.normalZ-z*contact.normalX;
   const motion=Math.min(1,Math.hypot(up,side));
   if(motion>0){
-   const angle=Math.atan2(contact.normalX,contact.normalZ)+side*dt*2.6/(LOOKOUT.radius+.65);
+   const angle=Math.atan2(contact.normalX,contact.normalZ)+side*dt*2.6/(contact.radius+.65);
    contact.normalX=Math.sin(angle);contact.normalZ=Math.cos(angle);
-   s.x=LOOKOUT.x+contact.normalX*(LOOKOUT.radius+.65);s.z=LOOKOUT.z+contact.normalZ*(LOOKOUT.radius+.65);
-   s.y+=up*dt*2.6;s.stamina=Math.max(0,s.stamina-motion*14*dt);
+   s.x=contact.x+contact.normalX*(contact.radius+.65);s.z=contact.z+contact.normalZ*(contact.radius+.65);
+   s.y=Math.min(contact.kind==='tree'?contact.top:Infinity,s.y+up*dt*2.6);s.stamina=Math.max(0,s.stamina-motion*14*dt);
   }
   s.facing=Math.atan2(-contact.normalX,-contact.normalZ);s.vy=0;
   if(s.stamina<=0){this.leaveClimb(false);this.message='Stamina empty · the wall releases you. Land safely or recover.';return;}
-  if(s.y>=LOOKOUT_TOP){s.x=LOOKOUT.x+contact.normalX*(LOOKOUT.radius-.8);s.z=LOOKOUT.z+contact.normalZ*(LOOKOUT.radius-.8);s.y=LOOKOUT_TOP;this.climbing=null;this.climbCooldown=.4;this.message='Lookout ledge reached. E gathers its shard. Rest, then jump and glide south to the marked wind circle.';}
+  if(contact.kind==='lookout'&&s.y>=LOOKOUT_TOP){s.x=LOOKOUT.x+contact.normalX*(LOOKOUT.radius-.8);s.z=LOOKOUT.z+contact.normalZ*(LOOKOUT.radius-.8);s.y=LOOKOUT_TOP;this.climbing=null;this.climbCooldown=.4;this.message='Lookout ledge reached. E gathers its shard. Rest, then jump and glide south to the marked wind circle.';}
   else if(s.y<=height(s.x,s.z)){s.y=height(s.x,s.z);this.climbing=null;this.climbCooldown=.4;this.message='Feet on the ground. Rest to recover stamina.';}
  }
  private leaveClimb(jump:boolean){
