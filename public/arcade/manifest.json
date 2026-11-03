@@ -4,65 +4,43 @@
   "playUrl": "https://intrepion.github.io/kata-inspired-by-the-legend-of-zelda-breath-of-the-wild-codex-dot/",
   "screenshots": [
     {
-      "path": "arcade/screenshots/view-01.jpg",
-      "sha256": "9c3340f207245a04401ff5bfa2f2f5f52ef1b9aad35f23ec3a2b46a7f96416d7",
-      "alt": "Gameplay capture 1",
-      "provenance": {
-        "kind": "existing_repository_capture",
-        "sourcePath": "docs/screenshots/valley-desktop.jpg",
-        "deployedBuild": null,
-        "captureDate": null
-      }
-    },
-    {
-      "path": "arcade/screenshots/view-02.jpg",
-      "sha256": "916d6cae22a18535d247e2bbf25ee29c27ef743c642f7e2106e8aecc860a32e9",
-      "alt": "Gameplay capture 2",
-      "provenance": {
-        "kind": "existing_repository_capture",
-        "sourcePath": "docs/screenshots/heartspire-desktop.jpg",
-        "deployedBuild": null,
-        "captureDate": null
-      }
-    },
-    {
-      "path": "arcade/screenshots/ci-20261102-01.jpg",
-      "sha256": "f548bea109800fffa906ecfb9442769d9d36a24aa9ca961926910c0e3813aa3a",
-      "alt": "Aster Vale gameplay, view 1",
+      "path": "arcade/screenshots/review-20261103-01.jpg",
+      "sha256": "f3a023a1e2f225b2227aab732a2a54a899d4c2b3c83a1918e0950ae0a205af59",
+      "alt": "Aster Vale gameplay after the mechanics update, view 1",
       "provenance": {
         "kind": "ci_gameplay_capture",
-        "sourcePath": "arcade/capture-evidence/ci-20261102-01.png",
-        "sourceSha256": "18ac29e1089df4b10a3ccb1d843511eecfd4dfdaa22b938de54a3a39b6273d4b",
-        "captureCommit": "3deea5f9c29069369128e974b8a241decd3a4dcf",
-        "workflowRunId": "41426197145",
+        "sourcePath": "arcade/capture-evidence/review-20261103-01.png",
+        "sourceSha256": "5edcc5f91e92c08da4d7964b8c2b213353a9d9a143c315e2983886c12e3cbf30",
+        "captureCommit": "82ce2cde5936ebc9b7e6cf7edb18644d7876899a",
+        "workflowRunId": "41675593254",
         "inputHashes": {
-          "index.html": "9cb1524b5129471f4908e8f7699e1b9a03aefe4d49a0415f8becd2d6808372d9",
+          "index.html": "2eb3a414eb4231d714d0d565b97a7f8c597610c3b57315b0e3329fe87a218ff4",
           "assets/index-ZWB21rOA.css": "8056f737475d4e7fc8542bbf5f8933c311bba9c3706c70d31c786580daf0ca5f",
-          "assets/index-oW3XsJ_R.js": "946c47cc75f3ba01406b5974d4cbbb58975f9297bcba11e6abf3dfd60aad535f"
+          "assets/index-D_ldEu5q.js": "104ea6b621193bbce5fd25f851836b55026555addc483cea05c44d3e105adc40"
         },
-        "publishedFilesVerifiedAt": "2026-11-02T19:01:20Z",
-        "captureRecordPath": "arcade/capture-evidence/ci-20261102-record.json",
-        "captureRecordSha256": "2057292b7136f2013469f32dc92a6435ec03d469accdaefec65833b5e551b6d5"
+        "publishedFilesVerifiedAt": "2026-11-03T16:39:41Z",
+        "captureRecordPath": "arcade/capture-evidence/review-20261103-record.json",
+        "captureRecordSha256": "fc0f092aa5e9aa3102f80adedb41321a0085c60b6b29c6e7f71d12bbaaedec29"
       }
     },
     {
-      "path": "arcade/screenshots/ci-20261102-02.jpg",
-      "sha256": "7b3c266ae9152da2095f846952186f65dbcdcf4a521420793c00cb369c9f41de",
-      "alt": "Aster Vale gameplay, view 2",
+      "path": "arcade/screenshots/review-20261103-02.jpg",
+      "sha256": "3523fc2cd31ca56387e457e380b9faa926bb5b277552818d19ee0dc383175d5f",
+      "alt": "Aster Vale gameplay after the mechanics update, view 2",
       "provenance": {
         "kind": "ci_gameplay_capture",
-        "sourcePath": "arcade/capture-evidence/ci-20261102-02.png",
-        "sourceSha256": "01459f499ccff2966b326a4cd836470b1575da8c6e26a3558eacada5512e27fa",
-        "captureCommit": "3deea5f9c29069369128e974b8a241decd3a4dcf",
-        "workflowRunId": "41426197145",
+        "sourcePath": "arcade/capture-evidence/review-20261103-02.png",
+        "sourceSha256": "ba59780303a9fd05c7b600cade8231143a71470a67f67153761ef518be522bca",
+        "captureCommit": "82ce2cde5936ebc9b7e6cf7edb18644d7876899a",
+        "workflowRunId": "41675593254",
         "inputHashes": {
-          "index.html": "9cb1524b5129471f4908e8f7699e1b9a03aefe4d49a0415f8becd2d6808372d9",
+          "index.html": "2eb3a414eb4231d714d0d565b97a7f8c597610c3b57315b0e3329fe87a218ff4",
           "assets/index-ZWB21rOA.css": "8056f737475d4e7fc8542bbf5f8933c311bba9c3706c70d31c786580daf0ca5f",
-          "assets/index-oW3XsJ_R.js": "946c47cc75f3ba01406b5974d4cbbb58975f9297bcba11e6abf3dfd60aad535f"
+          "assets/index-D_ldEu5q.js": "104ea6b621193bbce5fd25f851836b55026555addc483cea05c44d3e105adc40"
         },
-        "publishedFilesVerifiedAt": "2026-11-02T19:01:20Z",
-        "captureRecordPath": "arcade/capture-evidence/ci-20261102-record.json",
-        "captureRecordSha256": "2057292b7136f2013469f32dc92a6435ec03d469accdaefec65833b5e551b6d5"
+        "publishedFilesVerifiedAt": "2026-11-03T16:39:41Z",
+        "captureRecordPath": "arcade/capture-evidence/review-20261103-record.json",
+        "captureRecordSha256": "fc0f092aa5e9aa3102f80adedb41321a0085c60b6b29c6e7f71d12bbaaedec29"
       }
     }
   ]

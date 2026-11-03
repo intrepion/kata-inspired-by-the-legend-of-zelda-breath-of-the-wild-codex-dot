@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 1,
+  "workflowCommit": "82ce2cde5936ebc9b7e6cf7edb18644d7876899a",
+  "sourceCommit": "82ce2cde5936ebc9b7e6cf7edb18644d7876899a",
+  "runId": "41675593254",
+  "url": "http://127.0.0.1:4280/",
+  "inputs": {
+    "index.html": "2eb3a414eb4231d714d0d565b97a7f8c597610c3b57315b0e3329fe87a218ff4",
+    "assets/index-ZWB21rOA.css": "8056f737475d4e7fc8542bbf5f8933c311bba9c3706c70d31c786580daf0ca5f",
+    "assets/index-D_ldEu5q.js": "104ea6b621193bbce5fd25f851836b55026555addc483cea05c44d3e105adc40"
+  },
+  "browser": "153.0.8010.12",
+  "viewport": {
+    "width": 1280,
+    "height": 1000
+  },
+  "screenshots": [
+    "aster-vale-01.png",
+    "aster-vale-02.png"
+  ]
+}
